@@ -6,7 +6,7 @@ import { AuthContext } from '../../context/AuthProvider';
 
 const Login = () => {
 
-    const { user, faceBookLogin, login } = useContext(AuthContext)
+    const { faceBookLogin, login } = useContext(AuthContext)
 
     const facebookProvider = new FacebookAuthProvider();
     const [errorMsg, setErrorMsg] = useState('')
@@ -35,8 +35,10 @@ const Login = () => {
             .then(res => {
                 const user = res.user;
                 toast.success("Login successfully");
+                form.reset();
                 console.log(user);
-                setErrorMsg('')
+                setErrorMsg('');
+
             })
             .catch(error => {
                 toast.error(error.message);

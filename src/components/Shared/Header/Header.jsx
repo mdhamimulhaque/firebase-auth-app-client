@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../context/AuthProvider';
+import userPlaceholder from "../../../img/placeholder user.jpg";
 
 const Header = () => {
+    const { user, logOut } = useContext(AuthContext);
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+                toast.success("Log out successfully")
+            }).catch((error) => {
+                toast.error(error.message)
+            });
+    }
 
     return (
         <header className="p-4 bg-yellow-400 text-white dark:bg-gray-800 dark:text-gray-100">
@@ -22,12 +35,29 @@ const Header = () => {
 
                 </ul>
                 <div className="items-center flex-shrink-0 hidden lg:flex gap-4">
-                    <Link to="/login">
-                        <button className="self-center bg-green-400 hover:bg-green-500 px-8 py-3 rounded">Sign in</button>
-                    </Link>
-                    <Link to="/registration">
-                        <button className="self-center px-8 py-3 bg-green-400 hover:bg-green-500 font-semibold rounded dark:bg-violet-400 dark:text-gray-900">Registration</button>
-                    </Link>
+                    {user?.uid ?
+                        <>
+                            <button
+                                className="self-center bg-red-400 hover:bg-red-500 px-8 py-3 rounded"
+                                onClick={handleLogOut}
+                            >log Out</button>
+                            <div className="avatar flex items-center justify-center gap-2">
+                                <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src={user?.photoURL ? user?.photoURL : userPlaceholder} alt="" />
+                                </div>
+                                <span>{user?.displayName ? user?.displayName : "No Name"}</span>
+                            </div>
+                        </> :
+                        <>
+                            <Link to="/login">
+                                <button className="self-center bg-green-400 hover:bg-green-500 px-8 py-3 rounded">Log in</button>
+                            </Link>
+                            <Link to="/registration">
+                                <button className="self-center px-8 py-3 bg-green-400 hover:bg-green-500 font-semibold rounded dark:bg-violet-400 dark:text-gray-900">Registration</button>
+                            </Link>
+                        </>
+                    }
+
                 </div>
                 <button className="p-4 lg:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6 dark:text-gray-100">
