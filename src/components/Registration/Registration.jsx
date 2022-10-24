@@ -11,7 +11,6 @@ const Registration = () => {
     //---> handle create user
     const handleCreateUserSubmit = (e) => {
         e.preventDefault()
-        console.log("clicked")
         const form = e.target;
         const name = form.name.value;
         const photoURL = form.photoURL.value;
@@ -63,12 +62,12 @@ const Registration = () => {
                             <label className="label">
                                 <span className="label-text">Password</span>
                             </label>
-                            <input type="text" name="password" placeholder="password" className="input input-bordered" />
+                            <input type="password" name="password" placeholder="password" className="input input-bordered" />
+                            <p className='my-2 text-red-500'>{errorMsg}</p>
                             <label className="label">
                                 Already have an account? <Link to="/login" className="label-text-alt link text-blue-400 link-hover">  Please login</Link>
                             </label>
                         </div>
-                        <p className='my-2 text-red-500'>{errorMsg}</p>
                         <div className="form-control mt-6">
                             <button className="btn btn-primary">Registration</button>
                         </div>

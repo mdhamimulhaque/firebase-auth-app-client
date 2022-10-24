@@ -6,7 +6,8 @@ import { AuthContext } from '../../context/AuthProvider';
 
 const Login = () => {
 
-    const { user, faceBookLogin } = useContext(AuthContext)
+    const { user, faceBookLogin, login } = useContext(AuthContext)
+
     const facebookProvider = new FacebookAuthProvider();
     const [errorMsg, setErrorMsg] = useState('')
     //---> facebook
@@ -14,7 +15,28 @@ const Login = () => {
         faceBookLogin(facebookProvider)
             .then(res => {
                 const user = res.user;
-                toast.success("Login successfully")
+                toast.success("Login successfully");
+                setErrorMsg('')
+            })
+            .catch(error => {
+                toast.error(error.message);
+                setErrorMsg(error.message)
+            })
+    }
+
+    // ---> handle email login
+    const handleEmailLogin = (e) => {
+        e.preventDefault()
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        login(email, password)
+            .then(res => {
+                const user = res.user;
+                toast.success("Login successfully");
+                console.log(user);
+                setErrorMsg('')
             })
             .catch(error => {
                 toast.error(error.message);
@@ -29,18 +51,18 @@ const Login = () => {
                     <h1 className="text-5xl font-bold">Login</h1>
                 </div>
                 <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                    <div className="card-body">
+                    <form onSubmit={handleEmailLogin} className="card-body">
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Email</span>
                             </label>
-                            <input type="text" placeholder="email" className="input input-bordered" />
+                            <input name="email" type="text" placeholder="email" className="input input-bordered" />
                         </div>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Password</span>
                             </label>
-                            <input type="text" placeholder="password" className="input input-bordered" />
+                            <input name='password' type="password" placeholder="password" className="input input-bordered" />
                             <p className='my-2 text-red-500'>{errorMsg}</p>
                             <label className="label">
                                 <Link to="#" className="label-text-alt link link-hover">Forgot password?</Link>
@@ -59,7 +81,7 @@ const Login = () => {
                             >Facebook</button>
                             <button className="btn shadow-lg btn-ghost">Twitter</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
